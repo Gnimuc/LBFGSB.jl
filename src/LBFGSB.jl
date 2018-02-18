@@ -7,7 +7,7 @@ end
 # Load in `deps.jl`, complaining if it does not exist
 const depsjl_path = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
 if !isfile(depsjl_path)
-    error("LibFoo not installed properly, run Pkg.build(\"LibFoo\"), restart Julia and try again")
+    error("LBFGSB not installed properly, run Pkg.build(\"LBFGSB\"), restart Julia and try again")
 end
 include(depsjl_path)
 
@@ -25,7 +25,7 @@ function setulb!(n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, 
     @assert setulb != C_NULL "Could not find `setulb` within $liblbfgsb"
     ccall(setulb, Void, (Ptr{Cint}, Ptr{Cint}, Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
           Ptr{Cint}, Ref{Cdouble}, Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
-          Ptr{Cint}, Ptr{UInt8}, Ptr{Cint}, Ref{Cuchar}, Ref{Bool}, Ref{Cint}, Ref{Cdouble}, Csize_t, Csize_t),
+          Ptr{Cint}, Ptr{Cuchar}, Ptr{Cint}, Ref{Cuchar}, Ref{Bool}, Ref{Cint}, Ref{Cdouble}, Csize_t, Csize_t),
           n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave, 60, 60)
 end
 
