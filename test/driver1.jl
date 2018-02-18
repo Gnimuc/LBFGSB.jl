@@ -59,7 +59,7 @@ end
 # "We now define the starting point."
 x = zeros(Cdouble, nmax)
 for i = 1:n
-    x[i] = 3
+    x[i] = 3e0
 end
 
 println("Solving sample problem.")
