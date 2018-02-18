@@ -17,4 +17,18 @@ function __init__()
     check_deps()
 end
 
+function setulb!(n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave)
+    global liblbfgsb
+    hdl = Libdl.dlopen_e(liblbfgsb)
+    @assert hdl != C_NULL "Could not open $liblbfgsb"
+    setulb = Libdl.dlsym_e(hdl, :setulb_)
+    @assert setulb != C_NULL "Could not find `setulb` within $liblbfgsb"
+    ccall(setulb, Void, (Ptr{Cint}, Ptr{Cint}, Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
+          Ptr{Cint}, Ref{Cdouble}, Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
+          Ptr{Cint}, Ptr{UInt8}, Ptr{Cint}, Ref{Cuchar}, Ref{Bool}, Ref{Cint}, Ref{Cdouble}, Csize_t, Csize_t),
+          n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave, 60, 60)
+end
+
+export setulb!
+
 end # module
