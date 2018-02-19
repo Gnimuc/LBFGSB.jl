@@ -6,12 +6,18 @@
 
 This is a Julia wrapper for [L-BFGS-B Nonlinear Optimization Code](http://users.iems.northwestern.edu/%7Enocedal/lbfgsb.html).
 It will use and download pre-compiled binaries from [L-BFGS-B-Builder](https://github.com/Gnimuc/L-BFGS-B-Builder).
-Currently, this package only wraps a low-level subroutine `setulb`, no additional helper functions are provided, but you could take the driver in the `test` folder as an example.
 
 ## Installation
 ```julia
 Pkg.add("LBFGSB")
 ```
+
+## Usage
+```julia
+julia> using LBFGSB
+help?> setulb
+```
+The original examples/drivers in the L-BFGS-B library are translated in the `test` folder.
 
 ## License
 Note that, only the wrapper code in this repo is licensed under MIT, those downloaded
