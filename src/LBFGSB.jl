@@ -29,6 +29,19 @@ function setulb!(n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, 
           n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave, 60, 60)
 end
 
-export setulb!
+"""
+    timer(x)
+The double precision cpu timing subroutine in the L-BFGS-B code. 
+"""
+function timer(x)
+    global liblbfgsb
+    hdl = Libdl.dlopen_e(liblbfgsb)
+    @assert hdl != C_NULL "Could not open $liblbfgsb"
+    timer_ = Libdl.dlsym_e(hdl, :timer_)
+    @assert timer_ != C_NULL "Could not find `timer` within $liblbfgsb"
+    ccall(timer_, Void, (Ref{Cdouble},), x)
+end
+
+export setulb, timer
 
 end # module
