@@ -165,4 +165,5 @@ tol = 1e-4
 @test x[23] - 1.3947 < tol
 @test x[24] - 1.9452 < tol
 @test x[25] - 3.7837 < tol
-end
+
+end # EOB

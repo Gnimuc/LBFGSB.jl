@@ -1,7 +1,7 @@
 using LBFGSB
 using Base.Test
 
-# @testset "driver3" begin
+@testset "driver3" begin
 # translated from driver3.f
 # "This time-controlled driver shows that it is possible to terminate a run by
 #  elapsed CPU time, and yet be able to print all desired information. This driver
@@ -171,4 +171,4 @@ let
 
 end
 
-# @test fRef[] ≈ 1.083490083518441e-9
+end # EOB
