@@ -74,7 +74,7 @@ let
     @label CALLLBFGSB
 
     # This is the call to the L-BFGS-B code.
-    setulb!(nRef, mRef, x, l, u, nbd, fRef, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave)
+    setulb(nRef, mRef, x, l, u, nbd, fRef, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave)
 
     # "the minimization routine has returned to request the function f and gradient g values at the current x."
     if task[1:2] == b"FG"
