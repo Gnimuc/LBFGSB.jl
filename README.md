@@ -4,6 +4,8 @@
 [![Build Status](https://travis-ci.org/Gnimuc/LBFGSB.jl.svg?branch=master)](https://travis-ci.org/Gnimuc/LBFGSB.jl)
 [![Build status](https://ci.appveyor.com/api/projects/status/xlub93nifbjnit7a/branch/master?svg=true)](https://ci.appveyor.com/project/Gnimuc/lbfgsb-jl/branch/master)
 [![codecov](https://codecov.io/gh/Gnimuc/LBFGSB.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/Gnimuc/LBFGSB.jl)
+[![LBFGSB](http://pkg.julialang.org/badges/LBFGSB_0.6.svg)](http://pkg.julialang.org/detail/LBFGSB)
+[![LBFGSB](http://pkg.julialang.org/badges/LBFGSB_0.7.svg)](http://pkg.julialang.org/detail/LBFGSB)
 
 This is a Julia wrapper for [L-BFGS-B Nonlinear Optimization Code](http://users.iems.northwestern.edu/%7Enocedal/lbfgsb.html).
 It will use and download pre-compiled binaries from [L-BFGS-B-Builder](https://github.com/Gnimuc/L-BFGS-B-Builder).
