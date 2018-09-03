@@ -6,3 +6,4 @@ deps/deps.jl
 deps/usr*
 
 *.dat
+deps/build.log

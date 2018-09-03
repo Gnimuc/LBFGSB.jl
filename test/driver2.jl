@@ -1,5 +1,5 @@
 using LBFGSB
-using Base.Test
+using Test
 
 @testset "driver2" begin
 # translated from driver2.f
@@ -149,7 +149,7 @@ end
 
 tol = 1e-4
 
-@test all(x[1:10] - 1.0000 .< tol)
+@test all(x[1:10] .- 1.0000 .< tol)
 @test x[11] - 1.0001 < tol
 @test x[12] - 1.0002 < tol
 @test x[13] - 1.0003 < tol

@@ -1,11 +1,9 @@
 module LBFGSB
 
-if VERSION >= v"0.7.0-DEV.3382"
-    import Libdl
-end
+using  Libdl
 
 # Load in `deps.jl`, complaining if it does not exist
-const depsjl_path = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
+const depsjl_path = joinpath(@__DIR__, "..", "deps", "deps.jl")
 if !isfile(depsjl_path)
     error("LBFGSB not installed properly, run Pkg.build(\"LBFGSB\"), restart Julia and try again")
 end
@@ -95,7 +93,7 @@ function setulb(n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, c
     @assert hdl != C_NULL "Could not open $liblbfgsb"
     setulb_ = Libdl.dlsym_e(hdl, :setulb_)
     @assert setulb_ != C_NULL "Could not find `setulb` within $liblbfgsb"
-    ccall(setulb_, Void, (Ptr{Cint}, Ptr{Cint}, Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
+    ccall(setulb_, Cvoid, (Ptr{Cint}, Ptr{Cint}, Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
           Ptr{Cint}, Ref{Cdouble}, Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
           Ptr{Cint}, Ptr{Cuchar}, Ptr{Cint}, Ref{Cuchar}, Ref{Bool}, Ref{Cint}, Ref{Cdouble}, Csize_t, Csize_t),
           n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave, 60, 60)
@@ -111,7 +109,7 @@ function timer(x)
     @assert hdl != C_NULL "Could not open $liblbfgsb"
     timer_ = Libdl.dlsym_e(hdl, :timer_)
     @assert timer_ != C_NULL "Could not find `timer` within $liblbfgsb"
-    ccall(timer_, Void, (Ref{Cdouble},), x)
+    ccall(timer_, Cvoid, (Ref{Cdouble},), x)
 end
 
 export setulb, timer

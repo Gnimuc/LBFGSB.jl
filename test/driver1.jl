@@ -1,5 +1,5 @@
 using LBFGSB
-using Base.Test
+using Test
 
 @testset "driver1" begin
 # translated from driver1.f
