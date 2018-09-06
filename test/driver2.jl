@@ -13,7 +13,7 @@ mmax = 17    # the maximum number of limited memory corrections
 
 task = fill(Cuchar(' '), 60)    # fortran's blank padding
 csave = fill(Cuchar(' '), 60)    # fortran's blank padding
-lsave = zeros(Bool, 4)
+lsave = zeros(Cint, 4)
 isave = zeros(Cint, 44)
 dsave = zeros(Cdouble, 29)
 
