@@ -7,7 +7,7 @@ struct L_BFGS_B
     isave::Vector{Cint}
     dsave::Vector{Cdouble}
     wa::Vector{Cdouble}
-    iwa::Vector{Cdouble}
+    iwa::Vector{Cint}
     g::Vector{Cdouble}
     nbd::Vector{Cint}
     l::Vector{Cdouble}
