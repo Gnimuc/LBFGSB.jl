@@ -17,12 +17,11 @@ lsave = zeros(Cint, 4)
 isave = zeros(Cint, 44)
 dsave = zeros(Cdouble, 29)
 
-iprint = Ref{Cint}(-1)    # suppress the default output
+iprint = -1    # suppress the default output
 
 # "f is a DOUBLE PRECISION variable.  If the routine setulb returns with task(1:2)= 'FG',
 #  then f must be set by the user to contain the value of the function at the point x."
 f = 0.0
-fRef = Ref{Cdouble}(f)
 
 # "g is a DOUBLE PRECISION array of length n.  If the routine setulb returns with taskb(1:2)= 'FG',
 #  then g must be set by the user to contain the components of the gradient at the point x."
@@ -32,13 +31,11 @@ wa = zeros(Cdouble, 2mmax*nmax + 5nmax + 11mmax*mmax + 8mmax)
 iwa = zeros(Cint, 3*nmax)
 
 # "We suppress both code-supplied stopping tests because the user is providing his own stopping criteria."
-factr = Ref{Cdouble}(0.0)
-pgtol = Ref{Cdouble}(0.0)
+factr = 0.0
+pgtol = 0.0
 
 n = 25    # the dimension n of the sample problem
 m = 5     # the number of m of limited memory correction stored
-nRef = Ref{Cint}(n)
-mRef = Ref{Cint}(m)
 
 # provide nbd which defines the bounds on the variables:
 nbd = zeros(Cint, nmax)
@@ -74,12 +71,10 @@ let
     @label CALLLBFGSB
 
     # This is the call to the L-BFGS-B code.
-    setulb(nRef, mRef, x, l, u, nbd, fRef, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave)
+    setulb(n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave)
 
     # "the minimization routine has returned to request the function f and gradient g values at the current x."
     if task[1:2] == b"FG"
-        f = fRef[]
-
         # "Compute function value f for the sample problem."
         f = 0.25 * (x[1] - 1)^2
         for i = 2:n
@@ -98,8 +93,6 @@ let
         end
         g[n] = 8 * t₁
 
-        fRef[] = f
-
         # "go back to the minimization routine."
         @goto CALLLBFGSB
     end
@@ -107,8 +100,6 @@ let
     # "the minimization routine has returned with a new iterate, At this point have the
     #  opportunity of stopping the iteration or observing the values of certain parameters"
     if task[1:5] == b"NEW_X"
-        f = fRef[]
-
         # "First are two examples of stopping tests."
 
         # "Note: task(1:4) must be assigned the value 'STOP' to terminate the iteration

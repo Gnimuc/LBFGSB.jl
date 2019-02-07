@@ -23,12 +23,11 @@ tlimit = 0.2
 
 # "We suppress the default output.
 #  (The user could also elect to use the default output by choosing iprint >= 0.)"
-iprint = Ref{Cint}(-1)
+iprint = -1
 
 # "f is a DOUBLE PRECISION variable.  If the routine setulb returns with task(1:2)= 'FG',
 #  then f must be set by the user to contain the value of the function at the point x."
 f = 0.0
-fRef = Ref{Cdouble}(f)
 
 # "g is a DOUBLE PRECISION array of length n.  If the routine setulb returns with taskb(1:2)= 'FG',
 #  then g must be set by the user to contain the components of the gradient at the point x."
@@ -38,13 +37,11 @@ wa = zeros(Cdouble, 2mmax*nmax + 5nmax + 11mmax*mmax + 8mmax)
 iwa = zeros(Cint, 3*nmax)
 
 # "We suppress both code-supplied stopping tests because we will provide our own termination conditions"
-factr = Ref{Cdouble}(0.0)
-pgtol = Ref{Cdouble}(0.0)
+factr = 0.0
+pgtol = 0.0
 
 n = 1000    # the dimension n of the sample problem
 m = 10      # the number of m of limited memory correction stored
-nRef = Ref{Cint}(n)
-mRef = Ref{Cint}(m)
 
 # provide nbd which defines the bounds on the variables:
 nbd = zeros(Cint, nmax)
@@ -85,11 +82,10 @@ let
     @label CALLLBFGSB
 
     # This is the call to the L-BFGS-B code.
-    setulb(nRef, mRef, x, l, u, nbd, fRef, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave)
+    setulb(n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave)
 
     # "the minimization routine has returned to request the function f and gradient g values at the current x."
     if task[1:2] == b"FG"
-        f = fRef[]
         # "Before evaluating f and g we check the CPU time spent."
         timer(time2Ref)
 
@@ -126,8 +122,6 @@ let
                 g[i] = 8 * t₂ - 1.6e1 * x[i] * t₁
             end
             g[n] = 8 * t₁
-
-            fRef[] = f
         end
             # "go back to the minimization routine."
             @goto CALLLBFGSB
@@ -136,8 +130,6 @@ let
     # "the minimization routine has returned with a new iterate, The time limit
     #  has not been reached, and we test whether the following two stopping tests are satisfied:
     if task[1:5] == b"NEW_X"
-        f = fRef[]
-
         # "1) Terminate if the total number of f and g evaluations exceeds 900."
         isave[34] ≥ 900 && (task[1:4] = b"STOP"; terminate_info="TOTAL NO. of f AND g EVALUATIONS EXCEEDS LIMIT")
 

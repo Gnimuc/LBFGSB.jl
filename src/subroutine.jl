@@ -76,9 +76,9 @@ function setulb(n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, c
     @assert hdl != C_NULL "Could not open $liblbfgsb"
     setulb_ = Libdl.dlsym_e(hdl, :setulb_)
     @assert setulb_ != C_NULL "Could not find `setulb` within $liblbfgsb"
-    ccall(setulb_, Cvoid, (Ptr{Cint}, Ptr{Cint}, Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
-          Ptr{Cint}, Ref{Cdouble}, Ref{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble},
-          Ptr{Cint}, Ptr{Cuchar}, Ptr{Cint}, Ref{Cuchar}, Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Csize_t, Csize_t),
+    ccall(setulb_, Cvoid, (Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+          Ref{Cint}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+          Ref{Cint}, Ref{Cuchar}, Ref{Cint}, Ref{Cuchar}, Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Csize_t, Csize_t),
           n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave, 60, 60)
 end
 

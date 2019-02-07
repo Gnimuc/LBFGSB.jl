@@ -16,12 +16,11 @@ lsave = zeros(Cint, 4)
 isave = zeros(Cint, 44)
 dsave = zeros(Cdouble, 29)
 
-iprint = Ref{Cint}(1)    # print output at every iteration
+iprint = 1    # print output at every iteration
 
 # "f is a DOUBLE PRECISION variable.  If the routine setulb returns with task(1:2)= 'FG',
 #  then f must be set by the user to contain the value of the function at the point x."
 f = 0.0
-fRef = Ref{Cdouble}(f)
 
 # "g is a DOUBLE PRECISION array of length n.  If the routine setulb returns with taskb(1:2)= 'FG',
 #  then g must be set by the user to contain the components of the gradient at the point x."
@@ -36,8 +35,6 @@ pgtol = Ref{Cdouble}(1e-5)
 
 n = 25    # the dimension n of the sample problem
 m = 5     # the number of m of limited memory correction stored
-nRef = Ref{Cint}(n)
-mRef = Ref{Cint}(m)
 
 # provide nbd which defines the bounds on the variables:
 nbd = zeros(Cint, nmax)
@@ -73,12 +70,10 @@ let
     @label CALLLBFGSB
 
     # This is the call to the L-BFGS-B code.
-    setulb(nRef, mRef, x, l, u, nbd, fRef, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave)
+    setulb(n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave)
 
     # "the minimization routine has returned to request the function f and gradient g values at the current x."
     if task[1:2] == b"FG"
-        f = fRef[]
-
         # "Compute function value f for the sample problem."
         f = 0.25 * (x[1] - 1)^2
         for i = 2:n
@@ -97,8 +92,6 @@ let
         end
         g[n] = 8 * t₁
 
-        fRef[] = f
-
         # "go back to the minimization routine."
         @goto CALLLBFGSB
     end
@@ -110,6 +103,6 @@ let
     # "If task is neither FG nor NEW_X we terminate execution."
 end
 
-@test fRef[] ≈ 1.083490083518441e-9
+@test f ≈ 1.083490083518441e-9
 
 end # EOB
