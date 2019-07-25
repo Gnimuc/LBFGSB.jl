@@ -27,10 +27,9 @@ function f(x)
     4y
 end
 
-# and its gradient function that maps a vector to a vector
-function g(x)
+# and its gradient function that maps a vector x to a vector z
+function g!(z, x)
     n = length(x)
-    z = zeros(n)
     t₁ = x[2] - x[1]^2
     z[1] = 2 * (x[1] - 1) - 1.6e1 * x[1] * t₁
     for i = 2:n-1
@@ -39,11 +38,7 @@ function g(x)
         z[i] = 8 * t₂ - 1.6e1 * x[i] * t₁
     end
     z[n] = 8 * t₁
-    z
 end
-
-# define a function that returns both f(scalar) and its gradient(vector)
-func(x) = f(x), g(x)
 
 # the first argument is the dimension of the largest problem to be solved
 # the second argument is the maximum number of limited memory corrections
@@ -72,7 +67,7 @@ end
 #     iprint > 100 print details of every iteration including x and g
 # - maxfun: the maximum number of function evaluations
 # - maxiter: the maximum number of iterations
-julia> fout, xout = optimizer(func, x, bounds, m=5, factr=1e7, pgtol=1e-5, iprint=-1, maxfun=15000, maxiter=15000)
+julia> fout, xout = optimizer(f, g!, x, bounds, m=5, factr=1e7, pgtol=1e-5, iprint=-1, maxfun=15000, maxiter=15000)
 (1.0834900834300615e-9, [1.0, 1.0, 1.0, 1.00001, 1.00001, 1.00001, 1.00001, 1.00001, 1.00002, 1.00004  …  1.0026, 1.00521, 1.01045, 1.02101, 1.04246, 1.08672, 1.18097, 1.39469, 1.94516, 3.78366])
 
 # if your func needs extra arguments, a closure can be used to do the trick:

@@ -28,7 +28,7 @@ struct L_BFGS_B
     end
 end
 
-function (obj::L_BFGS_B)(func, x0::AbstractVector, bounds::AbstractMatrix;
+function (obj::L_BFGS_B)(func, grad!, x0::AbstractVector, bounds::AbstractMatrix;
     m=10, factr=1e7, pgtol=1e-5, iprint=-1, maxfun=15000, maxiter=15000)
     x = copy(x0)
     n = length(x)
@@ -57,8 +57,8 @@ function (obj::L_BFGS_B)(func, x0::AbstractVector, bounds::AbstractMatrix;
         setulb(n, m, x, obj.l, obj.u, obj.nbd, f, obj.g, factr, pgtol, obj.wa,
                obj.iwa, obj.task, iprint, obj.csave, obj.lsave, obj.isave, obj.dsave)
         if obj.task[1:2] == b"FG"
-            f, grad = func(x)
-            obj.g[1:n] = grad
+            f = func(x)
+            grad!(obj.g, x)
         elseif obj.task[1:5] == b"NEW_X"
             if obj.isave[30] ≥ maxiter
                 obj.task[1:43] = b"STOP: TOTAL NO. of ITERATIONS REACHED LIMIT"

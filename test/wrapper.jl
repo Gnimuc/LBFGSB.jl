@@ -11,10 +11,9 @@ function f(x)
     4y
 end
 
-# and its gradient function
-function g(x)
+# and its gradient function that maps a vector x to a vector z
+function g!(z, x)
     n = length(x)
-    z = zeros(n)
     t₁ = x[2] - x[1]^2
     z[1] = 2 * (x[1] - 1) - 1.6e1 * x[1] * t₁
     for i = 2:n-1
@@ -23,11 +22,7 @@ function g(x)
         z[i] = 8 * t₂ - 1.6e1 * x[i] * t₁
     end
     z[n] = 8 * t₁
-    z
 end
-
-# define a function that returns both f and g
-func(x) = f(x), g(x)
 
 @testset "wrapper" begin
     # the first argument is the dimension of the largest problem to be solved
@@ -57,6 +52,6 @@ func(x) = f(x), g(x)
     #     iprint > 100 print details of every iteration including x and g
     # - maxfun: the maximum number of function evaluations
     # - maxiter: the maximum number of iterations
-    fout, xout = optimizer(func, x, bounds, m=5, factr=1e7, pgtol=1e-5, iprint=-1, maxfun=15000, maxiter=15000)
+    fout, xout = optimizer(f, g!, x, bounds, m=5, factr=1e7, pgtol=1e-5, iprint=-1, maxfun=15000, maxiter=15000)
     @test fout ≈ 1.083490083518441e-9
 end
