@@ -54,4 +54,22 @@ end
     # - maxiter: the maximum number of iterations
     fout, xout = optimizer(f, g!, x, bounds, m=5, factr=1e7, pgtol=1e-5, iprint=-1, maxfun=15000, maxiter=15000)
     @test fout ≈ 1.083490083518441e-9
+    
+    #testing the original wrapper:
+    function g(x)
+        n = length(x)
+        z = zeros(n)
+        t₁ = x[2] - x[1]^2
+        z[1] = 2 * (x[1] - 1) - 1.6e1 * x[1] * t₁
+        for i = 2:n-1
+            t₂ = t₁
+            t₁ = x[i+1] - x[i]^2
+            z[i] = 8 * t₂ - 1.6e1 * x[i] * t₁
+        end
+        z[n] = 8 * t₁
+        z
+    end
+    func(x) = (f(x), g(x))
+    fout2, xout2 = optimizer(func, x, bounds, m=5, factr=1e7, pgtol=1e-5, iprint=-1, maxfun=15000, maxiter=15000)
+    @test fout2 ≈ 1.083490083518441e-9
 end
