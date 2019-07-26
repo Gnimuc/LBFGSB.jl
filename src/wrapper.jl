@@ -28,6 +28,49 @@ struct L_BFGS_B
     end
 end
 
+function (obj::L_BFGS_B)(func, grad!, x0::AbstractVector, bounds::AbstractMatrix;
+    m=10, factr=1e7, pgtol=1e-5, iprint=-1, maxfun=15000, maxiter=15000)
+    x = copy(x0)
+    n = length(x)
+    f = 0.0
+    # clean up
+    fill!(obj.task, Cuchar(' '))
+    fill!(obj.csave, Cuchar(' '))
+    fill!(obj.lsave, zero(Cint))
+    fill!(obj.isave, zero(Cint))
+    fill!(obj.dsave, zero(Cdouble))
+    fill!(obj.wa, zero(Cdouble))
+    fill!(obj.iwa, zero(Cint))
+    fill!(obj.g, zero(Cdouble))
+    fill!(obj.nbd, zero(Cint))
+    fill!(obj.l, zero(Cdouble))
+    fill!(obj.u, zero(Cdouble))
+    # set bounds
+    for i = 1:n
+        obj.nbd[i] = bounds[1,i]
+        obj.l[i] = bounds[2,i]
+        obj.u[i] = bounds[3,i]
+    end
+    # start
+    obj.task[1:5] = b"START"
+    while true
+        setulb(n, m, x, obj.l, obj.u, obj.nbd, f, obj.g, factr, pgtol, obj.wa,
+               obj.iwa, obj.task, iprint, obj.csave, obj.lsave, obj.isave, obj.dsave)
+        if obj.task[1:2] == b"FG"
+            f = func(x)
+            grad!(obj.g, x)
+        elseif obj.task[1:5] == b"NEW_X"
+            if obj.isave[30] ≥ maxiter
+                obj.task[1:43] = b"STOP: TOTAL NO. of ITERATIONS REACHED LIMIT"
+            elseif obj.isave[34] ≥ maxfun
+                obj.task[1:52] = b"STOP: TOTAL NO. of f AND g EVALUATIONS EXCEEDS LIMIT"
+            end
+        else
+            return f, x
+        end
+    end
+end
+
 function (obj::L_BFGS_B)(func, x0::AbstractVector, bounds::AbstractMatrix;
     m=10, factr=1e7, pgtol=1e-5, iprint=-1, maxfun=15000, maxiter=15000)
     x = copy(x0)
