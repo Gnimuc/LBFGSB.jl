@@ -71,12 +71,7 @@ Note, `nmax` is the dimension of the largest problem to be solved, `mmax` is the
     14. dsave[16] = the square of the 2-norm of the line search direction vector.
 """
 function setulb(n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave)
-    global liblbfgsb
-    hdl = Libdl.dlopen_e(liblbfgsb)
-    @assert hdl != C_NULL "Could not open $liblbfgsb"
-    setulb_ = Libdl.dlsym_e(hdl, :setulb_)
-    @assert setulb_ != C_NULL "Could not find `setulb` within $liblbfgsb"
-    ccall(setulb_, Cvoid, (Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
+    ccall((:setulb_, liblbfgsb), Cvoid, (Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
           Ref{Cint}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble},
           Ref{Cint}, Ref{Cuchar}, Ref{Cint}, Ref{Cuchar}, Ref{Cint}, Ref{Cint}, Ref{Cdouble}, Csize_t, Csize_t),
           n, m, x, l, u, nbd, f, g, factr, pgtol, wa, iwa, task, iprint, csave, lsave, isave, dsave, 60, 60)
@@ -86,11 +81,4 @@ end
     timer(x)
 The double precision cpu timing subroutine in the L-BFGS-B code.
 """
-function timer(x)
-    global liblbfgsb
-    hdl = Libdl.dlopen_e(liblbfgsb)
-    @assert hdl != C_NULL "Could not open $liblbfgsb"
-    timer_ = Libdl.dlsym_e(hdl, :timer_)
-    @assert timer_ != C_NULL "Could not find `timer` within $liblbfgsb"
-    ccall(timer_, Cvoid, (Ref{Cdouble},), x)
-end
+timer(x) = ccall((:timer_, liblbfgsb), Cvoid, (Ref{Cdouble},), x)

@@ -1,9 +1,8 @@
+.DS_Store
+/Manifest.toml
 *.jl.cov
 *.jl.*.cov
 *.jl.mem
-
-deps/deps.jl
-deps/usr*
 
 *.dat
 deps/build.log
