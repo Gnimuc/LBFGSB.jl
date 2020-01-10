@@ -2,7 +2,6 @@
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![Build Status](https://travis-ci.org/Gnimuc/LBFGSB.jl.svg?branch=master)](https://travis-ci.org/Gnimuc/LBFGSB.jl)
-[![Build status](https://ci.appveyor.com/api/projects/status/xlub93nifbjnit7a/branch/master?svg=true)](https://ci.appveyor.com/project/Gnimuc/lbfgsb-jl/branch/master)
 [![codecov](https://codecov.io/gh/Gnimuc/LBFGSB.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/Gnimuc/LBFGSB.jl)
 
 This is a Julia wrapper for [L-BFGS-B Nonlinear Optimization Code](http://users.iems.northwestern.edu/%7Enocedal/lbfgsb.html).
@@ -18,7 +17,7 @@ pkg> add LBFGSB
 using LBFGSB
 
 # define a function that maps a vector to a scalar
-# let's define a multidimensional Rosenbrock function(https://en.wikipedia.org/wiki/Rosenbrock_function): 
+# let's define a multidimensional Rosenbrock function(https://en.wikipedia.org/wiki/Rosenbrock_function):
 function f(x)
     y = 0.25 * (x[1] - 1)^2
     for i = 2:length(x)
