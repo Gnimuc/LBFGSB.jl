@@ -73,3 +73,29 @@ end
     fout2, xout2 = optimizer(func, x, bounds, m=5, factr=1e7, pgtol=1e-5, iprint=-1, maxfun=15000, maxiter=15000)
     @test fout2 ≈ 1.083490083518441e-9
 end
+
+@testset "lbfgsb" begin
+    #  0->unbounded, 1->only lower bound, 2-> both lower and upper bounds, 3->only upper bound
+    lb=[-Inf,-Inf,-2.,6f0]
+    ub=[Inf,3.,2,Inf]
+    btyps=[0,3,2,1]
+    
+    @test typ_bnd.(lb,ub) == btyps
+    
+    @test_throws ErrorException typ_bnd(6,-1.)
+    
+    n,m=4,6
+    o,b=_opt_bounds(n,m,lb,ub)
+    
+    @test size(b)==(3,n)
+    @test b[2,:] == lb
+    @test b[3,:] == ub
+    @test b[1,:] == btyps
+    
+    od=L_BFGS_B(n,m)
+    @test all(getproperty(od,i)==getproperty(o,i) for i in fieldnames(L_BFGS_B))
+    
+    fout,xout=lbfgsb(x->0.5sum(abs,x),(g,x)->g.=x,100*rand(3),lb=[0.5,-Inf,-0.1],ub=[Inf,0.2,Inf])
+    @test fout ≈ 0.25
+    @test xout ≈ [0.5,0,0]
+ end
