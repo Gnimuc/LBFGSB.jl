@@ -80,12 +80,12 @@ end
     ub=[Inf,3.,2,Inf]
     btyps=[0,3,2,1]
     
-    @test typ_bnd.(lb,ub) == btyps
+    @test LBFGSB.typ_bnd.(lb,ub) == btyps
     
-    @test_throws ErrorException typ_bnd(6,-1.)
+    @test_throws ErrorException LBFGSB.typ_bnd(6,-1.)
     
     n,m=4,6
-    o,b=_opt_bounds(n,m,lb,ub)
+    o,b=LBFGSB._opt_bounds(n,m,lb,ub)
     
     @test size(b)==(3,n)
     @test b[2,:] == lb
