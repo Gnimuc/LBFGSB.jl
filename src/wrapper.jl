@@ -113,3 +113,38 @@ function (obj::L_BFGS_B)(func, x0::AbstractVector, bounds::AbstractMatrix;
         end
     end
 end
+
+function typ_bnd(lb,ub)
+        lb > ub && error("Inconsistent bounds")
+    
+        lbinf = lb==-Inf
+        ubinf = ub==+Inf
+
+        lbinf && ubinf && return 0
+        !lbinf && ubinf && return 1
+        !lbinf && !ubinf && return 2
+        lbinf && !ubinf && return 3
+end
+
+function _opt_bounds(n,m,lb,ub)
+    optimizer=L_BFGS_B(n,m)
+    bounds=zeros(3,n)
+    bounds[2,:].=lb
+    bounds[3,:].=ub
+    bounds[1,:].= typ_bnd.(lb,ub)
+    return optimizer,bounds
+end
+
+function lbfgsb(f,g!,x0;m=10,lb=[-Inf for i in x0],ub=[Inf for i in x0],kwargs...)
+    n=length(x0)
+    optimizer,bounds=_opt_bounds(n,m,lb,ub)
+   
+    optimizer(f,g!,x0,bounds;m=m,kwargs...)
+end
+
+function lbfgsb(f,x0;m=10,lb=[-Inf for i in x0],ub=[Inf for i in x0],kwargs...)
+    n=length(x0)
+    optimizer,bounds=_opt_bounds(n,m,lb,ub)
+    
+    optimizer(f,x0,bounds;m=m,kwargs...)
+end
