@@ -71,4 +71,10 @@ julia> fout, xout = optimizer(f, g!, x, bounds, m=5, factr=1e7, pgtol=1e-5, ipri
 # if your func needs extra arguments, a closure can be used to do the trick:
 # optimizer(λ->func(λ, extra_args...), x, bounds, m=5, factr=1e7, pgtol=1e-5, iprint=-1, maxfun=15000, maxiter=15000)
 ```
+This package also provides `lbfgsb`, a convenience function that computes the `bounds` input matrix and the `optimizer` internally. The inputs of `lbfgs` are the same as above, except for lower/upper bounds specified optionally as keyword parameters `lb`/`ub` (defaulting to `-Inf/Inf`, i.e. unbounded problem).  With the example above, an equivalent call to `lbfgsb` would be:
+```julia
+lb = [isodd(i) ? 1e0 : -1e2 for i in 1:n]
+ub = 1e2
+julia> fout, xout = lbfgsb(f, g!, x, lb=lb, ub=ub, m=5, factr=1e7, pgtol=1e-5, iprint=-1, maxfun=15000, maxiter=15000)
+```
 The original examples/drivers in the L-BFGS-B library are translated in the `test` folder directly using low-level `setulb`.
