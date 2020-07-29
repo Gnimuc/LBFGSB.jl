@@ -6,6 +6,6 @@ include("subroutine.jl")
 export setulb, timer
 
 include("wrapper.jl")
-export L_BFGS_B
+export L_BFGS_B,lbfgsb
 
 end # module
