@@ -1,7 +1,8 @@
 # LBFGSB
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![Build Status](https://travis-ci.com/Gnimuc/LBFGSB.jl.svg?branch=master)](https://travis-ci.com/Gnimuc/LBFGSB.jl)
+[![Build Status](https://github.com/Gnimuc/LBFGSB.jl/workflows/CI/badge.svg)](https://github.com/Gnimuc/LBFGSB.jl/actions/workflows/ci.yml)
+[![TagBot](https://github.com/Gnimuc/LBFGSB.jl/workflows/TagBot/badge.svg)](https://github.com/Gnimuc/LBFGSB.jl/actions/workflows/TagBot.yml)
 [![codecov](https://codecov.io/gh/Gnimuc/LBFGSB.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/Gnimuc/LBFGSB.jl)
 
 This is a Julia wrapper for [L-BFGS-B Nonlinear Optimization Code](http://users.iems.northwestern.edu/%7Enocedal/lbfgsb.html).
