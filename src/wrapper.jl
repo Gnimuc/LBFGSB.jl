@@ -54,6 +54,7 @@ function (obj::L_BFGS_B)(func, grad!, x0::AbstractVector, bounds::AbstractMatrix
     # start
     obj.task[1:5] = b"START"
     while true
+        flush(stdout)
         setulb(n, m, x, obj.l, obj.u, obj.nbd, f, obj.g, factr, pgtol, obj.wa,
                obj.iwa, obj.task, iprint, obj.csave, obj.lsave, obj.isave, obj.dsave)
         if obj.task[1:2] == b"FG"
@@ -97,6 +98,7 @@ function (obj::L_BFGS_B)(func, x0::AbstractVector, bounds::AbstractMatrix;
     # start
     obj.task[1:5] = b"START"
     while true
+        flush(stdout)
         setulb(n, m, x, obj.l, obj.u, obj.nbd, f, obj.g, factr, pgtol, obj.wa,
                obj.iwa, obj.task, iprint, obj.csave, obj.lsave, obj.isave, obj.dsave)
         if obj.task[1:2] == b"FG"
